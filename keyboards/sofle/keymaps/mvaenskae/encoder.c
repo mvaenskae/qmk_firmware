@@ -29,9 +29,6 @@ void scroll_mouse_wheel(bool clockwise) {
 void rotate_keymaps(void) {
 	switch (get_highest_layer(default_layer_state)) {
 		case _QWERTY:
-			set_single_persistent_default_layer(_COLEMAK);
-			break;
-		case _COLEMAK:
 			set_single_persistent_default_layer(_COLEMAKDH);
 			break;
 		case _COLEMAKDH:
@@ -46,7 +43,6 @@ void rotate_keymaps(void) {
 void encoder_update_left_single(bool clockwise) {
 	switch (get_highest_layer(layer_state)) {
 		case _QWERTY:
-		case _COLEMAK:
 		case _COLEMAKDH:
 			rotate_keymaps();
 			break;
@@ -58,7 +54,6 @@ void encoder_update_left_single(bool clockwise) {
 void encoder_update_left_dual(bool clockwise) {
 	switch (get_highest_layer(layer_state)) {
 		case _QWERTY:
-		case _COLEMAK:
 		case _COLEMAKDH:
 			rotate_keymaps();
 			break;
@@ -78,7 +73,6 @@ void encoder_update_left(bool clockwise) {
 void encoder_update_right(bool clockwise) {
 	switch (get_highest_layer(layer_state)) {
 		case _QWERTY:
-		case _COLEMAK:
 		case _COLEMAKDH:
 			scroll_page(clockwise);
 			break;

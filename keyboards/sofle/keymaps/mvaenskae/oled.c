@@ -26,9 +26,6 @@ static void print_status_narrow(void) {
         case _QWERTY:
             oled_write_P(PSTR("Q:"), false);
             break;
-        case _COLEMAK:
-            oled_write_P(PSTR("C:"), false);
-            break;
         case _COLEMAKDH:
             oled_write_P(PSTR("D:"), false);
             break;
@@ -44,7 +41,6 @@ static void print_status_narrow(void) {
     // Print current layer
     switch (get_highest_layer(layer_state)) {
         case _QWERTY:
-        case _COLEMAK:
         case _COLEMAKDH:
             oled_write_ln_P(PSTR("Base"), false);
             break;
