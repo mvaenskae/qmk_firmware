@@ -1,6 +1,6 @@
 #ifdef ENCODER_ENABLE
 
-#include "keymap.h"
+#include "keymap_mine.h"
 
 void either(bool is_clockwise, uint16_t clockwise, uint16_t counter_clockwise) {
 	if (is_clockwise) {

@@ -1,6 +1,6 @@
 #include QMK_KEYBOARD_H
 #include <split_util.h>
-#include "keymap.h"
+#include "keymap_mine.h"
 #include "encoder.c"
 #include "oled.c"
 #include "rgb_light.c"

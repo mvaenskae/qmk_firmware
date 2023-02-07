@@ -1,6 +1,6 @@
 #ifdef RGBLIGHT_ENABLE
 
-#include "keymap.h"
+#include "keymap_mine.h"
 
 #define INDICATOR_BRIGHTNESS 30
 

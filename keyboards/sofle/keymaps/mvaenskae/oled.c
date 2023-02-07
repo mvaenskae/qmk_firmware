@@ -1,6 +1,6 @@
 #ifdef OLED_ENABLE
 
-#include "keymap.h"
+#include "keymap_mine.h"
 
 bool get_state_leds(char* state_leds, char default_value) {
 	led_t led_state = host_keyboard_led_state();
