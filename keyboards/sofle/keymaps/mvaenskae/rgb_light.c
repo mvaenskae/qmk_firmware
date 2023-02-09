@@ -79,18 +79,6 @@
 
 char layer_state_str[70];
 
-// Now define the array of layers. Later layers take precedence
-
-// QWERTY - Light on inner column and underglow
-const rgblight_segment_t PROGMEM layer_lights_qwerty[] = RGBLIGHT_LAYER_SEGMENTS(
-	COLOUR_LAYER(HSV_RED)
-);
-
-// COLEMAK-DH - Light on inner column and underglow
-const rgblight_segment_t PROGMEM layer_lights_colemakdh[] = RGBLIGHT_LAYER_SEGMENTS(
-	COLOUR_LAYER(HSV_ORANGE)
-);
-
 // _LOWER - Light on outer column and underglow
 const rgblight_segment_t PROGMEM layer_lights_lower[] = RGBLIGHT_LAYER_SEGMENTS(
 	COLOUR_HIGHLIGHT(HSV_TEAL)
@@ -120,8 +108,6 @@ const rgblight_segment_t PROGMEM layer_lights_switch[] = RGBLIGHT_LAYER_SEGMENTS
 );
 
 const rgblight_segment_t* const PROGMEM _rgb_layers[] = RGBLIGHT_LAYERS_LIST(
-	layer_lights_colemakdh,
-	layer_lights_qwerty,
 	layer_lights_lower,
 	layer_lights_raise,
 	layer_lights_adjust,
@@ -130,13 +116,11 @@ const rgblight_segment_t* const PROGMEM _rgb_layers[] = RGBLIGHT_LAYERS_LIST(
 );
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-	rgblight_set_layer_state(0, layer_state_cmp(state, _DEFAULTS) && layer_state_cmp(default_layer_state, _COLEMAKDH));
-	rgblight_set_layer_state(1, layer_state_cmp(state, _DEFAULTS) && layer_state_cmp(default_layer_state, _QWERTY));
-	rgblight_set_layer_state(2, layer_state_cmp(state, _LOWER));
-	rgblight_set_layer_state(3, layer_state_cmp(state, _RAISE));
-	rgblight_set_layer_state(4, layer_state_cmp(state, _ADJUST));
-	rgblight_set_layer_state(5, layer_state_cmp(state, _NUMPAD));
-	rgblight_set_layer_state(6, layer_state_cmp(state, _SWITCH));
+	rgblight_set_layer_state(0, layer_state_cmp(state, _LOWER));
+	rgblight_set_layer_state(1, layer_state_cmp(state, _RAISE));
+	rgblight_set_layer_state(2, layer_state_cmp(state, _ADJUST));
+	rgblight_set_layer_state(3, layer_state_cmp(state, _NUMPAD));
+	rgblight_set_layer_state(4, layer_state_cmp(state, _SWITCH));
 	return state;
 }
 
