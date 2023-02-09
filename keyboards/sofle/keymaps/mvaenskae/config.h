@@ -41,17 +41,17 @@
 #define CUSTOM_FONT
 #define CUSTOM_LAYER_READ //if you remove this it causes issues - needs better guarding
 
+#define ENCODER_DIRECTION_FLIP
 #define TAPPING_FORCE_HOLD
 #ifdef TAPPING_TERM
-    #undef TAPPING_TERM
-    #define TAPPING_TERM 200
+	#undef TAPPING_TERM
+	#define TAPPING_TERM 200
 #endif
-#define ENCODER_DIRECTION_FLIP
 
 #define SPLIT_LAYER_STATE_ENABLE
 #define SPLIT_LED_STATE_ENABLE
 #define SPLIT_MODS_ENABLE
-#define SPLIT_WPM_ENABLE
+//#define SPLIT_WPM_ENABLE
 #define SPLIT_OLED_ENABLE
 
 /* ws2812 RGB LED */
