@@ -3,8 +3,8 @@
 
 enum sofle_layers {
     _DEFAULTS = 0,
-    _QWERTY = 0,
-    _COLEMAKDH,
+    _COLEMAKDH = 0,
+    _QWERTY,
     _LOWER,
     _RAISE,
     _ADJUST,
