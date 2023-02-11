@@ -48,11 +48,14 @@
 	#define TAPPING_TERM 200
 #endif
 
-#define SPLIT_LAYER_STATE_ENABLE
-#define SPLIT_LED_STATE_ENABLE
-#define SPLIT_MODS_ENABLE
-//#define SPLIT_WPM_ENABLE
-#define SPLIT_OLED_ENABLE
+#ifdef OLED_ENABLE
+	#define OLED_FONT_H "keyboards/sofle/keymaps/mvaenskae/glcdfont.c"
+        #define SPLIT_LAYER_STATE_ENABLE
+	#define SPLIT_LED_STATE_ENABLE
+	#define SPLIT_MODS_ENABLE
+	#define SPLIT_OLED_ENABLE
+	//#define SPLIT_WPM_ENABLE
+#endif
 
 /* ws2812 RGB LED */
 #define RGB_DI_PIN D3
