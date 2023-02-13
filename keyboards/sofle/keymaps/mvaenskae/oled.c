@@ -91,8 +91,8 @@ void render_mod_gui(void) {
 bool get_state_leds(char* state_leds, char default_value) {
 	led_t led_state = host_keyboard_led_state();
 	state_leds[0] = led_state.num_lock    ? 'N' : default_value;
-	state_leds[2] = led_state.caps_lock   ? 'C' : default_value;
-	state_leds[4] = led_state.scroll_lock ? 'S' : default_value;
+	state_leds[1] = led_state.caps_lock   ? 'C' : default_value;
+	state_leds[2] = led_state.scroll_lock ? 'S' : default_value;
 	return true;
 }
 
@@ -171,8 +171,9 @@ int print_layer(int start) {
 
 int print_state_leds(int start) {
 	char BLANK = ' ';
-	char state_leds[5] = { BLANK, '-', BLANK, '-', BLANK };
+	char state_leds[4] = { BLANK, BLANK, BLANK, 0 };
 	get_state_leds(state_leds, BLANK);
+	oled_write_P(PSTR(" "), false);
 	oled_write_ln(state_leds, false);
 	return start + 1;
 }
