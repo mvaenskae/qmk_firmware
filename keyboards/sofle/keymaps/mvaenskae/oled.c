@@ -66,6 +66,8 @@ static const char PROGMEM font_state_numpad[6] = {0xaa, 0xab, 0xac, 0xad, 0xae, 
 static const char PROGMEM font_state_config[6] = {0x8a, 0x8b, 0x8c, 0x8d, 0x8e, 0};
 static const char PROGMEM font_state_empty[6] = {0, 0, 0, 0, 0, 0};
 
+static const char PROGMEM font_lang_german[6] = {0x80, 0x81, 0x82, 0x83, 0x84, 0};
+static const char PROGMEM font_lang_english[6] = {0x20, 0x55, 0x53, 0x41, 0x20, 0};
 
 void render_mod_ctrl(void) {
     static const char PROGMEM font_ctrl[3] = {0x93, 0x94, 0};
@@ -117,12 +119,9 @@ int print_header(int start) {
 }
 
 int print_language(int start) {
-	oled_write_P(PSTR("  "), false);
-	oled_write_char(is_german ? 0x9f : 0x24, false);
-	oled_write_P(PSTR("  "), false);
+	print_font_symbols_at(is_german ? (char *) font_lang_german : (char *) font_lang_english, start, 1);
 	return start + 1;
 }
-
 
 int print_keymap(int start) {
 	char* keymap;
