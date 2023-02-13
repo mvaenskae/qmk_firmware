@@ -378,6 +378,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		return handle_action(record, LCTL(KC_X));
         case KC_UNDO:
 		return handle_action(record, LCTL(MV_Z));
+        case KC_AGIN:
+		return handle_action(record, S(C(MV_Z)));
+        case KC_FIND:
+		return handle_action(record, LCTL(KC_F));
 	case MV_Y:
 		return PRESS_KEY(Y);
 	case MV_Z:
