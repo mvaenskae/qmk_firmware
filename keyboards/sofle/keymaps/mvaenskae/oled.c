@@ -1,6 +1,7 @@
 #ifdef OLED_ENABLE
 
 #include "keymap_mine.h"
+#include "shared_state.h"
 
 #define PASS_ARRAY(x) x, sizeof(x)
 
@@ -108,14 +109,16 @@ int print_raw_at(const char* logo, uint16_t len, int start, int height) {
 }
 
 int print_header(int start) {
-	return print_raw_at(PASS_ARRAY(tux_logo), start, 2);
+	if (is_osx) {
+		return print_raw_at(PASS_ARRAY(apple_logo), start, 2);
+	} else {
+		return print_raw_at(PASS_ARRAY(tux_logo), start, 2);
+	}
 }
 
 int print_language(int start) {
-	int language_code = 0x24; // 0x9f
-
 	oled_write_P(PSTR("  "), false);
-	oled_write_char(language_code, false);
+	oled_write_char(is_german ? 0x9f : 0x24, false);
 	oled_write_P(PSTR("  "), false);
 	return start + 1;
 }
