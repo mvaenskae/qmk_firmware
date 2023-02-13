@@ -7,6 +7,14 @@
 #include "shared_state.h"
 #include "rgb_light.c"
 
+#include "keymap_osx_english.h"
+#include "keymap_osx_german.h"
+
+#define PRESS_KEY(CODE) harmonized_key_press(record, KC_##CODE, DE_##CODE, OSX_EN_##CODE, OSX_DE_##CODE)
+#define PRESS_KEY_MISSING(CODE) harmonized_key_press(record, DE_##CODE, DE_##CODE, OSX_EN_##CODE, OSX_DE_##CODE)
+#define PRESS_KEY_DIFFERENT(CODE_EN, CODE_DE) harmonized_key_press(record, KC_##CODE_EN, DE_##CODE_DE, OSX_EN_##CODE_EN, OSX_DE_##CODE_DE)
+
+
 enum custom_keycodes {
     KC_COLEMAKDH = SAFE_RANGE,
     KC_QWERTY,
@@ -25,7 +33,7 @@ enum custom_keycodes {
     MV_Y,
     MV_Z,
     MV_ACUT,
-    MV_GRAV,
+    MV_GRV,
     MV_CIRC,
     MV_TILD,
     MV_PIPE,
@@ -40,7 +48,7 @@ enum custom_keycodes {
     MV_QUOT,
     MV_PLUS,
     MV_MINS,
-    MV_SCOL,
+    MV_SCLN,
     MV_LCBR,
     MV_RCBR,
     MV_LABK,
@@ -151,9 +159,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //,-----------------------------------------------------.                          ,-----------------------------------------------------.
    KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                              KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
 //|--------+--------+--------+--------+--------+--------|                          |--------+--------+--------+--------+--------+--------|
-   _______, MV_DEGR, MV_ACUT, MV_GRAV, MV_CIRC, MV_TILD,                            MV_PIPE, MV_SLSH, MV_UNDS, MV_LPRN, MV_RPRN, _______,
+   _______, MV_DEGR, MV_ACUT, MV_GRV,  MV_CIRC, MV_TILD,                            MV_PIPE, MV_SLSH, MV_UNDS, MV_LPRN, MV_RPRN, _______,
 //|--------+--------+--------+--------+--------+--------|                          |--------+--------+--------+--------+--------+--------|
-   _______, MV_AT,   MV_QUES, MV_AMPR, MV_DQUO, MV_QUOT,                            MV_PLUS, MV_MINS, MV_SCOL, MV_LCBR, MV_RCBR, MV_LABK,
+   _______, MV_AT,   MV_QUES, MV_AMPR, MV_DQUO, MV_QUOT,                            MV_PLUS, MV_MINS, MV_SCLN, MV_LCBR, MV_RCBR, MV_LABK,
 //|--------+--------+--------+--------+--------+--------| ====== .        , ====== |--------+--------+--------+--------+--------+--------|
    MV_BSLS, MV_HASH, MV_EXLM, MV_DLR,  MV_EURO, MV_PERC, XXXXXXX,          XXXXXXX, MV_ASTR, MV_EQL,  MV_COLN, MV_LBRC, MV_RBRC, MV_RABK,
 //|--------+--------+--------+--------+--------+--------| ====== |        | ====== |--------+--------+--------+--------+--------+--------|
@@ -277,11 +285,19 @@ bool handle_action(keyrecord_t *record, uint16_t action_code) {
 	return false;
 }
 
-bool harmonized_key_press(keyrecord_t *record, uint16_t keycode_en, uint16_t keycode_de) {
+bool harmonized_key_press(keyrecord_t *record, uint16_t keycode_en, uint16_t keycode_de, uint16_t keycode_en_osx, uint16_t keycode_de_osx) {
 	if (is_german) {
-		return handle_action(record, keycode_de);
+		if (is_osx) {
+			return handle_action(record, keycode_de_osx);
+		} else {
+			return handle_action(record, keycode_de);
+		}
 	} else {
-		return handle_action(record, keycode_en);
+		if (is_osx) {
+			return handle_action(record, keycode_en_osx);
+		} else {
+			return handle_action(record, keycode_en);
+		}
 	}
 }
 
@@ -309,6 +325,7 @@ bool toggle_layer(keyrecord_t *record, uint16_t temp_layer) {
 	update_tri_layer(_LOWER, _RAISE, _ADJUST);
 	return false;
 }
+
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -362,83 +379,83 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case KC_UNDO:
 		return handle_action(record, LCTL(MV_Z));
 	case MV_Y:
-	    	return harmonized_key_press(record, KC_Y, DE_Y);
+		return PRESS_KEY(Y);
 	case MV_Z:
-		return harmonized_key_press(record, KC_Z, DE_Z);
+		return PRESS_KEY(Z);
 	case MV_DEGR:
-		return harmonized_key_press(record, DE_DEG, DE_DEG);
+		return PRESS_KEY_MISSING(DEG);
 	case MV_ACUT:
-		return harmonized_key_press(record, DE_ACUT, DE_ACUT);
-	case MV_GRAV:
-		return harmonized_key_press(record, KC_GRV, DE_GRV);
+		return PRESS_KEY_MISSING(ACUT);
+	case MV_GRV:
+		return PRESS_KEY(GRV);
 	case MV_CIRC:
-		return harmonized_key_press(record, KC_CIRC, DE_CIRC);
+		return PRESS_KEY(CIRC);
 	case MV_TILD:
-		return harmonized_key_press(record, KC_TILD, DE_TILD);
+		return PRESS_KEY(TILD);
 	case MV_PIPE:
-		return harmonized_key_press(record, KC_PIPE, DE_PIPE);
+		return PRESS_KEY(PIPE);
 	case MV_SLSH:
-		return harmonized_key_press(record, KC_SLSH, DE_SLSH);
+		return PRESS_KEY(SLSH);
 	case MV_UNDS:
-		return harmonized_key_press(record, KC_UNDS, DE_UNDS);
+		return PRESS_KEY(UNDS);
 	case MV_LPRN:
-		return harmonized_key_press(record, KC_LPRN, DE_LPRN);
+		return PRESS_KEY(LPRN);
 	case MV_RPRN:
-		return harmonized_key_press(record, KC_RPRN, DE_RPRN);
+		return PRESS_KEY(RPRN);
 	case MV_AT:
-		return harmonized_key_press(record, KC_AT, DE_AT);
+		return PRESS_KEY(AT);
 	case MV_QUES:
-		return harmonized_key_press(record, KC_QUES, DE_QUES);
+		return PRESS_KEY(QUES);
 	case MV_AMPR:
-		return harmonized_key_press(record, KC_AMPR, DE_AMPR);
+		return PRESS_KEY(AMPR);
 	case MV_DQUO:
-		return harmonized_key_press(record, KC_DQUO, DE_DQUO);
+		return PRESS_KEY(DQUO);
 	case MV_QUOT:
-		return harmonized_key_press(record, KC_QUOT, DE_QUOT);
+		return PRESS_KEY(QUOT);
 	case MV_PLUS:
-		return harmonized_key_press(record, KC_PLUS, DE_PLUS);
+		return PRESS_KEY(PLUS);
 	case MV_MINS:
-		return harmonized_key_press(record, KC_MINS, DE_MINS);
-	case MV_SCOL:
-		return harmonized_key_press(record, KC_SCLN, DE_SCLN);
+		return PRESS_KEY(MINS);
+	case MV_SCLN:
+		return PRESS_KEY(SCLN);
 	case MV_LCBR:
-		return harmonized_key_press(record, KC_LCBR, DE_LCBR);
+		return PRESS_KEY(LCBR);
 	case MV_RCBR:
-		return harmonized_key_press(record, KC_RCBR, DE_RCBR);
+		return PRESS_KEY(RCBR);
 	case MV_LABK:
-		return harmonized_key_press(record, KC_LABK, DE_LABK);
+		return PRESS_KEY(LABK);
 	case MV_RABK:
-		return harmonized_key_press(record, KC_RABK, DE_RABK);
+		return PRESS_KEY(RABK);
 	case MV_HASH:
-		return harmonized_key_press(record, KC_HASH, DE_HASH);
+		return PRESS_KEY(HASH);
 	case MV_EXLM:
-		return harmonized_key_press(record, KC_EXLM, DE_EXLM);
+		return PRESS_KEY(EXLM);
 	case MV_DLR:
-		return harmonized_key_press(record, KC_DLR, DE_DLR);
+		return PRESS_KEY(DLR);
 	case MV_EURO:
-		return harmonized_key_press(record, DE_EURO, DE_EURO);
+		return PRESS_KEY_MISSING(EURO);
 	case MV_BSLS:
-		return harmonized_key_press(record, KC_BSLS, DE_BSLS);
+		return PRESS_KEY(BSLS);
 	case MV_ASTR:
-		return harmonized_key_press(record, KC_ASTR, DE_ASTR);
+		return PRESS_KEY(ASTR);
 	case MV_EQL:
-		return harmonized_key_press(record, KC_EQL, DE_EQL);
+		return PRESS_KEY(EQL);
 	case MV_COLN:
-		return harmonized_key_press(record, KC_COLN, DE_COLN);
+		return PRESS_KEY(COLN);
 	case MV_LBRC:
-		return harmonized_key_press(record, KC_LBRC, DE_LBRC);
+		return PRESS_KEY(LBRC);
 	case MV_RBRC:
-		return harmonized_key_press(record, KC_RBRC, DE_RBRC);
+		return PRESS_KEY(RBRC);
 	case MV_PERC:
-		return harmonized_key_press(record, KC_PERC, DE_PERC);
+		return PRESS_KEY(PERC);
 	case MV_ADIA:
-		return harmonized_key_press(record, KC_QUOT, DE_ADIA);
+		return PRESS_KEY_DIFFERENT(QUOT, ADIA);
 	case MV_ODIA:
-		return harmonized_key_press(record, KC_SLSH, DE_ODIA);
+		return PRESS_KEY_DIFFERENT(SLSH, ODIA);
 	case MV_UDIA:
-		return harmonized_key_press(record, KC_SCLN, DE_UDIA);
+		return PRESS_KEY_DIFFERENT(SCLN, UDIA);
 	case MV_SS:
-		return harmonized_key_press(record, KC_GRV, DE_SS);
+		return PRESS_KEY_DIFFERENT(GRV, SS);
     }
     return true;
 }
