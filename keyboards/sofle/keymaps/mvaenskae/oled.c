@@ -181,7 +181,7 @@ void print_active_modifier(uint8_t modifiers, uint8_t mod_mask, void (*print_fun
 	if (modifiers & mod_mask) {
 		print_function();
 	} else {
-		oled_write_P(PSTR(" "), false);
+		oled_write_P(PSTR("  "), false);
 	}
 }
 
