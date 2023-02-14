@@ -92,9 +92,9 @@ void render_mod_gui(void) {
 
 bool get_state_leds(char* state_leds, char default_value) {
 	led_t led_state = host_keyboard_led_state();
-	state_leds[0] = led_state.num_lock    ? 'N' : default_value;
-	state_leds[1] = led_state.caps_lock   ? 'C' : default_value;
-	state_leds[2] = led_state.scroll_lock ? 'S' : default_value;
+	state_leds[0] = led_state.scroll_lock ? 'S' : default_value;
+	state_leds[1] = led_state.num_lock    ? 'N' : default_value;
+	state_leds[2] = led_state.caps_lock   ? 'C' : default_value;
 	return true;
 }
 
@@ -181,7 +181,7 @@ void print_active_modifier(uint8_t modifiers, uint8_t mod_mask, void (*print_fun
 	if (modifiers & mod_mask) {
 		print_function();
 	} else {
-		oled_write_P(PSTR("  "), false);
+		oled_write_P(PSTR(" "), false);
 	}
 }
 
