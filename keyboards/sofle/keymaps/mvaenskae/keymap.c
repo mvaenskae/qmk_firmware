@@ -371,17 +371,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case MV_LNDL:
 		return handle_action(record, LCTL(KC_BSPC));
         case KC_COPY:
-		return handle_action(record, LCTL(KC_C));
+		return handle_action_os_independent(record, C(KC_C), A(KC_C));
         case KC_PASTE:
-		return handle_action(record, LCTL(KC_V));
+		return handle_action_os_independent(record, C(KC_V), A(KC_V));
         case KC_CUT:
-		return handle_action(record, LCTL(KC_X));
+		return handle_action_os_independent(record, C(KC_X), A(KC_X));
         case KC_UNDO:
-		return handle_action(record, LCTL(MV_Z));
+		return handle_action_os_independent(record, C(MV_Z), A(MV_Z));
         case KC_AGIN:
-		return handle_action(record, S(C(MV_Z)));
+		return handle_action_os_independent(record, C(MV_Y), A(MV_Y));
         case KC_FIND:
-		return handle_action(record, LCTL(KC_F));
+		return handle_action_os_independent(record, C(KC_F), A(KC_F));
 	case MV_Y:
 		return PRESS_KEY(Y);
 	case MV_Z:
