@@ -2,11 +2,11 @@
 
 #include "keymap_mine.h"
 
-void either(bool is_clockwise, uint16_t clockwise, uint16_t counter_clockwise) {
-	if (is_clockwise) {
-	    tap_code(clockwise);
+void either(bool is_ccw, uint16_t ccw, uint16_t cw) {
+	if (is_ccw) {
+	    tap_code16(ccw);
 	} else {
-	    tap_code(counter_clockwise);
+	    tap_code16(cw);
 	}
 }
 
@@ -15,18 +15,26 @@ void scroll_audio_volume(bool clockwise) {
 }
 
 void scroll_page(bool clockwise) {
-	either(clockwise, KC_PGDN, KC_PGUP);
+	either(clockwise, KC_PGUP, KC_PGDN);
 }
 
 void scroll_line(bool clockwise) {
-	either(clockwise, KC_DOWN, KC_UP);
+	either(clockwise, KC_UP, KC_DOWN);
 }
 
 void scroll_mouse_wheel(bool clockwise) {
-	either(clockwise, KC_WH_D, KC_WH_U);
+	either(clockwise, KC_WH_U, KC_WH_D);
 }
 
-void rotate_keymaps(void) {
+void scroll_tab(bool clockwise) {
+	either(clockwise, S(C(KC_TAB)), C(KC_TAB));
+}
+
+void scroll_word(bool clockwise) {
+		either(clockwise, C(KC_LEFT), C(KC_RGHT));
+}
+
+void rotate_keymap(void) {
 	switch (get_highest_layer(default_layer_state)) {
 		case _QWERTY:
 			set_single_persistent_default_layer(_COLEMAKDH);
@@ -39,15 +47,19 @@ void rotate_keymaps(void) {
 	}
 }
 
-
 void encoder_update_left_single(bool clockwise) {
 	switch (get_highest_layer(layer_state)) {
 		case _QWERTY:
 		case _COLEMAKDH:
-			rotate_keymaps();
+			scroll_audio_volume(clockwise);
+			break;
+		case _RAISE:
+		case _LOWER:
+			scroll_tab(clockwise);
 			break;
 		default:
-			scroll_audio_volume(clockwise);
+			rotate_keymap();
+			break;
 	}
 }
 
@@ -55,10 +67,15 @@ void encoder_update_left_dual(bool clockwise) {
 	switch (get_highest_layer(layer_state)) {
 		case _QWERTY:
 		case _COLEMAKDH:
-			rotate_keymaps();
+			scroll_audio_volume(clockwise);
+			break;
+		case _RAISE:
+		case _LOWER:
+			scroll_tab(clockwise);
 			break;
 		default:
-			scroll_audio_volume(clockwise);
+			rotate_keymap();
+			break;
 	}
 }
 
@@ -78,15 +95,13 @@ void encoder_update_right(bool clockwise) {
 			break;
 		case _RAISE:
 		case _LOWER:
-			scroll_line(clockwise);
+			scroll_word(clockwise);
 			break;
 		default:
 			scroll_mouse_wheel(clockwise);
 			break;
 	}
 }
-
-
 
 bool encoder_update_user(uint8_t index, bool clockwise) {
 	if (index == 0) {
