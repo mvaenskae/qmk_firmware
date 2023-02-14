@@ -70,7 +70,7 @@ enum custom_keycodes {
     MV_SS
 };
 
-volatile bool is_german = false;
+volatile bool is_german = true;
 volatile bool is_osx = false;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
