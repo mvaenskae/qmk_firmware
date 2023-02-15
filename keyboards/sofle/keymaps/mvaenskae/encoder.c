@@ -23,15 +23,15 @@ void scroll_audio_volume(bool clockwise) {
 }
 
 void scroll_page(bool clockwise) {
-	either(clockwise, KC_PGUP, KC_PGDN);
+	either(clockwise, KC_PGDN, KC_PGUP);
 }
 
 void scroll_line(bool clockwise) {
-	either(clockwise, KC_UP, KC_DOWN);
+	either(clockwise, KC_DOWN, KC_UP);
 }
 
 void scroll_mouse_wheel(bool clockwise) {
-	either(clockwise, KC_WH_U, KC_WH_D);
+	either(clockwise, KC_WH_D, KC_WH_U);
 }
 
 void scroll_tab(bool clockwise) {
@@ -39,7 +39,7 @@ void scroll_tab(bool clockwise) {
 }
 
 void scroll_word(bool clockwise) {
-		either(clockwise, C(KC_LEFT), C(KC_RGHT));
+	either(clockwise, C(KC_RGHT), C(KC_LEFT));
 }
 
 void rotate_keymap(bool clockwise) {
@@ -101,18 +101,19 @@ void encoder_update_left(bool clockwise) {
 }
 
 void encoder_update_right(bool clockwise) {
+	bool fixed_clockwise = !clockwise;
 	switch (get_highest_layer(layer_state)) {
 		case _QWERTY:
 		case _GAME:
 		case _COLEMAKDH:
-			scroll_page(clockwise);
+			scroll_page(fixed_clockwise);
 			break;
 		case _RAISE:
 		case _LOWER:
-			scroll_word(clockwise);
+			scroll_word(fixed_clockwise);
 			break;
 		default:
-			scroll_mouse_wheel(clockwise);
+			scroll_line(fixed_clockwise);
 			break;
 	}
 }
