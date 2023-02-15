@@ -56,6 +56,7 @@ static const char PROGMEM brand_of_sacrifice_logo[] = {
 
 static const char PROGMEM font_keyboard[11] = {0xb5, 0xb6, 0xb7, 0xb8, 0xb9, 0xd5, 0xd6, 0xd7, 0xd8, 0xd9, 0};
 static const char PROGMEM font_kb_split[11] = {0xba, 0xbb, 0xbc, 0xbd, 0xbe, 0xda, 0xdb, 0xdc, 0xdd, 0xde, 0};
+static const char PROGMEM font_controller[11] = {0xa0, 0xa1, 0xa2, 0xa3, 0xa4, 0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0};
 static const char PROGMEM font_kb_empty[11] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 static const char PROGMEM font_state_base[6] = {0x85, 0x86, 0x87, 0x88, 0x89, 0};
@@ -129,6 +130,9 @@ int print_keymap(int start) {
 		case _QWERTY:
 			keymap = (char*) font_keyboard;
 			break;
+		case _GAME:
+			keymap = (char*) font_controller;
+			break;
 		case _COLEMAKDH:
 			keymap = (char*) font_kb_split;
 			break;
@@ -143,6 +147,7 @@ int print_layer(int start) {
 	char* layer;
 	switch (get_highest_layer(layer_state)) {
 		case _QWERTY:
+		case _GAME:
 		case _COLEMAKDH:
 			layer = (char*) font_state_base;
 			break;

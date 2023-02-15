@@ -10,6 +10,14 @@ void either(bool is_ccw, uint16_t ccw, uint16_t cw) {
 	}
 }
 
+void change_layer(bool is_ccw, uint16_t ccw, uint16_t cw) {
+	if (is_ccw) {
+	    set_single_persistent_default_layer(ccw);
+	} else {
+	    set_single_persistent_default_layer(cw);
+	}
+}
+
 void scroll_audio_volume(bool clockwise) {
 	either(clockwise, KC_VOLD, KC_VOLU);
 }
@@ -34,13 +42,16 @@ void scroll_word(bool clockwise) {
 		either(clockwise, C(KC_LEFT), C(KC_RGHT));
 }
 
-void rotate_keymap(void) {
+void rotate_keymap(bool clockwise) {
 	switch (get_highest_layer(default_layer_state)) {
 		case _QWERTY:
-			set_single_persistent_default_layer(_COLEMAKDH);
+			change_layer(clockwise, _COLEMAKDH, _GAME);
+			break;
+		case _GAME:
+			change_layer(clockwise, _QWERTY, _COLEMAKDH);
 			break;
 		case _COLEMAKDH:
-			set_single_persistent_default_layer(_QWERTY);
+			change_layer(clockwise, _GAME, _QWERTY);
 			break;
 		default:
 			break;
@@ -50,6 +61,7 @@ void rotate_keymap(void) {
 void encoder_update_left_single(bool clockwise) {
 	switch (get_highest_layer(layer_state)) {
 		case _QWERTY:
+		case _GAME:
 		case _COLEMAKDH:
 			scroll_audio_volume(clockwise);
 			break;
@@ -58,7 +70,7 @@ void encoder_update_left_single(bool clockwise) {
 			scroll_tab(clockwise);
 			break;
 		default:
-			rotate_keymap();
+			rotate_keymap(clockwise);
 			break;
 	}
 }
@@ -66,6 +78,7 @@ void encoder_update_left_single(bool clockwise) {
 void encoder_update_left_dual(bool clockwise) {
 	switch (get_highest_layer(layer_state)) {
 		case _QWERTY:
+		case _GAME:
 		case _COLEMAKDH:
 			scroll_audio_volume(clockwise);
 			break;
@@ -74,7 +87,7 @@ void encoder_update_left_dual(bool clockwise) {
 			scroll_tab(clockwise);
 			break;
 		default:
-			rotate_keymap();
+			rotate_keymap(clockwise);
 			break;
 	}
 }
@@ -90,6 +103,7 @@ void encoder_update_left(bool clockwise) {
 void encoder_update_right(bool clockwise) {
 	switch (get_highest_layer(layer_state)) {
 		case _QWERTY:
+		case _GAME:
 		case _COLEMAKDH:
 			scroll_page(clockwise);
 			break;

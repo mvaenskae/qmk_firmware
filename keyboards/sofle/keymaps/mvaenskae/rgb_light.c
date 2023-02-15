@@ -127,6 +127,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 void keyboard_post_init_user(void) {
 	rgblight_layers = _rgb_layers;
 	rgblight_mode_noeeprom(1); // haven't found a way to set this in a more useful way
+	set_single_persistent_default_layer(_COLEMAKDH);
 }
 
 #endif
