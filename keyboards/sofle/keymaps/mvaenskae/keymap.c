@@ -347,14 +347,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		}
 		return false;
 	case MV_KBLY:
-		if (record -> event.pressed) {
-			if (get_highest_layer(default_layer_state) == _COLEMAKDH) {
-				set_single_persistent_default_layer(_QWERTY);
-			} else {
-				set_single_persistent_default_layer(_COLEMAKDH);
-			}
+		if (get_highest_layer(default_layer_state) == _COLEMAKDH) {
+			return change_default_layer(record, _QWERTY);
+		} else {
+			return change_default_layer(record, _COLEMAKDH);
 		}
-		return false;
 	case MV_LANG:
 		if (record -> event.pressed) {
 			is_german ^= 1;
