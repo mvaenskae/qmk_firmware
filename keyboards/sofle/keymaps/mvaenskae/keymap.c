@@ -390,27 +390,40 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		}
 		return false;
 	case MV_WDPV:
-		return handle_action_os_independent(record, LCTL(KC_LEFT), LALT(KC_LEFT));
+		return handle_action_os_independent(record, C(KC_LEFT), A(KC_LEFT));
         case MV_WDNX:
-		return handle_action_os_independent(record, LCTL(KC_RIGHT), LALT(KC_RIGHT));
+		return handle_action_os_independent(record, C(KC_RIGHT), A(KC_RIGHT));
         case MV_LNST:
-		return handle_action_os_independent(record, KC_HOME, LCTL(KC_LEFT));
+		return handle_action_os_independent(record, KC_HOME, G(KC_LEFT));
         case MV_LNEN:
-		return handle_action_os_independent(record, KC_END, LCTL(KC_RIGHT));
+		return handle_action_os_independent(record, KC_END, G(KC_RIGHT));
         case MV_LNDL:
-		return handle_action(record, LCTL(KC_BSPC));
+		if (is_osx) {
+			handle_action(record, C(KC_A));
+			return handle_action(record, C(KC_K));
+		} else {
+			return handle_action(record, C(KC_BSPC));
+		}
         case KC_COPY:
-		return handle_action_os_independent(record, C(KC_C), A(KC_C));
+		return handle_action_os_independent(record, C(KC_C), G(KC_C));
         case KC_PASTE:
-		return handle_action_os_independent(record, C(KC_V), A(KC_V));
+		return handle_action_os_independent(record, C(KC_V), G(KC_V));
         case KC_CUT:
-		return handle_action_os_independent(record, C(KC_X), A(KC_X));
+		return handle_action_os_independent(record, C(KC_X), G(KC_X));
         case KC_UNDO:
-		return handle_action_os_independent(record, C(MV_Z), A(MV_Z));
+		if (is_german) {
+			return handle_action_os_independent(record, C(DE_Z), G(DE_Z));
+		} else {
+			return handle_action_os_independent(record, C(KC_Z), G(KC_Z));
+		}
         case KC_AGIN:
-		return handle_action_os_independent(record, C(MV_Y), A(MV_Y));
+		if (is_german) {
+			return handle_action_os_independent(record, C(DE_Y), G(DE_Y));
+		} else {
+			return handle_action_os_independent(record, C(KC_Y), G(KC_Y));
+		}
         case KC_FIND:
-		return handle_action_os_independent(record, C(KC_F), A(KC_F));
+		return handle_action_os_independent(record, C(KC_F), G(KC_F));
 	case MV_Y:
 		return PRESS_KEY(Y);
 	case MV_Z:

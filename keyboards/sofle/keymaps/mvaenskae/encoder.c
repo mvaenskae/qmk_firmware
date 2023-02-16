@@ -1,6 +1,7 @@
 #ifdef ENCODER_ENABLE
 
 #include "keymap_mine.h"
+#include "shared_state.h"
 
 void either(bool is_ccw, uint16_t ccw, uint16_t cw) {
 	if (is_ccw) {
@@ -39,7 +40,11 @@ void scroll_tab(bool clockwise) {
 }
 
 void scroll_word(bool clockwise) {
-	either(clockwise, C(KC_RGHT), C(KC_LEFT));
+	if (is_osx) {
+		either(clockwise, A(KC_RGHT), A(KC_LEFT));
+	} else {
+		either(clockwise, C(KC_RGHT), C(KC_LEFT));
+	}
 }
 
 void rotate_keymap(bool clockwise) {
