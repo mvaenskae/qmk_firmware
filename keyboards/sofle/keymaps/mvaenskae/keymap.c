@@ -13,6 +13,7 @@
 #define PRESS_KEY(CODE) harmonized_key_press(record, KC_##CODE, DE_##CODE, OSX_EN_##CODE, OSX_DE_##CODE)
 #define PRESS_KEY_MISSING(CODE) harmonized_key_press(record, DE_##CODE, DE_##CODE, OSX_EN_##CODE, OSX_DE_##CODE)
 #define PRESS_KEY_DIFFERENT(CODE_EN, CODE_DE) harmonized_key_press(record, KC_##CODE_EN, DE_##CODE_DE, OSX_EN_##CODE_EN, OSX_DE_##CODE_DE)
+#define PRESS_MOD_KEY_DIFFERENT(CODE_DEFAULT, CODE_SPECIAL) handle_action_mod(record, KC_##CODE_DEFAULT, KC_##CODE_SPECIAL)
 
 
 enum custom_keycodes {
@@ -68,11 +69,17 @@ enum custom_keycodes {
     MV_ADIA,
     MV_ODIA,
     MV_UDIA,
-    MV_SS
+    MV_SS,
+    MV_LMOD,
+    MV_RCTL,
+    MV_RALT,
+    MV_RGUI,
+    MV_RSFT
 };
 
 volatile bool is_german = true;
 volatile bool is_osx = false;
+volatile bool is_left = false;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /* LAYER_ID
@@ -109,11 +116,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //|--------+--------+--------+--------+--------+--------|                          |--------+--------+--------+--------+--------+--------|
    LT(_NUMPAD, KC_TAB), KC_Q, KC_W, KC_E, KC_R, KC_T,                               MV_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC,
 //|--------+--------+--------+--------+--------+--------|                          |--------+--------+--------+--------+--------+--------|
-   KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    MV_UDIA, KC_RSFT,
+   KC_LSFT, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                               KC_H,    KC_J,    KC_K,    KC_L,    MV_UDIA, MV_RSFT,
 //|--------+--------+--------+--------+--------+--------| ====== .        , ====== |--------+--------+--------+--------+--------+--------|
    XXXXXXX, MV_Z,    KC_X,    KC_C,    KC_V,    KC_D,    KC_MUTE,          KC_MPLY, KC_N,    KC_M,    KC_COMM, KC_DOT,  MV_ODIA, MV_ADIA,
 //|--------+--------+--------+--------+--------+--------| ====== |        | ====== |--------+--------+--------+--------+--------+--------|
-                     KC_LCTL, KC_LGUI, KC_LALT, KC_LOWER, KC_ENT,          KC_SPC,  KC_RAISE,KC_RALT, KC_RGUI, KC_RCTL
+                     KC_LCTL, KC_LGUI, KC_LALT, KC_LOWER, KC_ENT,          KC_SPC,  KC_RAISE,MV_RALT, MV_RGUI, MV_RCTL
 //                  '--------+--------+--------+--------+--------'        '--------+--------+--------+--------+--------'
 ),
 
@@ -164,11 +171,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //|--------+--------+--------+--------+--------+--------|                          |--------+--------+--------+--------+--------+--------|
    LT(_NUMPAD, KC_TAB), KC_Q, KC_W, KC_F, KC_P, KC_B,                               KC_J,    KC_L,    KC_U,    MV_Y,    MV_UDIA, KC_BSPC,
 //|--------+--------+--------+--------+--------+--------|                          |--------+--------+--------+--------+--------+--------|
-   KC_LSFT, KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                               KC_M,    KC_N,    KC_E,    KC_I,    KC_O,    KC_RSFT,
+   KC_LSFT, KC_A,    KC_R,    KC_S,    KC_T,    KC_G,                               KC_M,    KC_N,    KC_E,    KC_I,    KC_O,    MV_RSFT,
 //|--------+--------+--------+--------+--------+--------| ====== .        , ====== |--------+--------+--------+--------+--------+--------|
    XXXXXXX, MV_Z,    KC_X,    KC_C,    KC_D,    KC_V,    KC_MUTE,          KC_MPLY, KC_K,    KC_H,    KC_COMM, KC_DOT,  MV_ODIA, MV_ADIA,
 //|--------+--------+--------+--------+--------+--------| ====== |        | ====== |--------+--------+--------+--------+--------+--------|
-                     KC_LCTL, KC_LGUI, KC_LALT, KC_LOWER, KC_ENT,          KC_SPC,  KC_RAISE,KC_RALT, KC_RGUI, KC_RCTL
+                     KC_LCTL, KC_LGUI, KC_LALT, KC_LOWER, KC_ENT,          KC_SPC,  KC_RAISE,MV_RALT, MV_RGUI, MV_RCTL
 //                  '--------+--------+--------+--------+--------'        '--------+--------+--------+--------+--------'
 ),
 
@@ -239,7 +246,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_ADJUST] = LAYOUT(
 //,-----------------------------------------------------.                          ,-----------------------------------------------------.
-   _______, NK_TOGG, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, 
+   _______, NK_TOGG, MV_LMOD, XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
 //|--------+--------+--------+--------+--------+--------|                          |--------+--------+--------+--------+--------+--------|
    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, MV_OSX,                             XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
 //|--------+--------+--------+--------+--------+--------|                          |--------+--------+--------+--------+--------+--------|
@@ -334,6 +341,14 @@ bool harmonized_key_press(keyrecord_t *record, uint16_t keycode_en, uint16_t key
 bool handle_action_os_independent(keyrecord_t *record, uint16_t default_action, uint16_t osx_action) {
 	if (is_osx) {
 		return handle_action(record, osx_action);
+	} else {
+		return handle_action(record, default_action);
+	}
+}
+
+bool handle_action_mod(keyrecord_t *record, uint16_t default_action, uint16_t left_action) {
+	if (is_left) {
+		return handle_action(record, left_action);
 	} else {
 		return handle_action(record, default_action);
 	}
@@ -502,6 +517,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		return PRESS_KEY_DIFFERENT(SCLN, UDIA);
 	case MV_SS:
 		return PRESS_KEY_DIFFERENT(GRV, SS);
+	case MV_LMOD:
+		if (record -> event.pressed) {
+			is_left ^= 1;
+		}
+		return false;
+	case MV_RCTL:
+		return PRESS_MOD_KEY_DIFFERENT(RCTL, LCTL);
+	case MV_RALT:
+		return PRESS_MOD_KEY_DIFFERENT(RALT, LALT);
+	case MV_RGUI:
+		return PRESS_MOD_KEY_DIFFERENT(RGUI, LGUI);
+	case MV_RSFT:
+		return PRESS_MOD_KEY_DIFFERENT(RSFT, LSFT);
     }
     return true;
 }
