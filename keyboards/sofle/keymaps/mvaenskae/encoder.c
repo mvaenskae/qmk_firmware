@@ -129,7 +129,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 	} else if (index == 1) {
 		encoder_update_right(clockwise);
 	}
-	return true;
+	return false;
 }
 
 #endif

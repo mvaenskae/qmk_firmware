@@ -58,6 +58,7 @@
 #endif
 
 /* ws2812 RGB LED */
+#define WS2812_DI_PIN D3
 #define RGB_DI_PIN D3
 #define RGBLIGHT_LAYERS
 
